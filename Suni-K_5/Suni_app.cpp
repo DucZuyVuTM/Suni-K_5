@@ -1,46 +1,124 @@
+#include "Suni_app.h"
 #include "Suni2.h"
 #include "Suni3.h"
 #include "Suni4.h"
 #include "Suni5.h"
 #include "Suni6.h"
 #include "Suni7.h"
-#include "Suni_app.h"
 
+// Конструктор класса Suni_app
+Suni_app::Suni_app(Suni* Suni_main) : Suni(Suni_main) {}
+
+// Метод создания дерева иерархии
 void Suni_app::Taoj_cay_phan_cap() {
-	new Suni2("Read", this);
-	new Suni3("Pult", this);
-	new Suni4("Set", this);
-	new Suni5("Get", this);
-	new Suni6("Print", this);
-	new Suni7("CoffeeGet", this);
-	Virt_obj->GetVater("Sys")->set_sv((TYPE_SIGNAL)(&Suni2::signal), Virt_obj->GetVater("Read"), (TYPE_HANDEL)(&Suni2::handler));
-	Virt_obj->GetVater("Read")->set_sv((TYPE_SIGNAL)(&Suni2::signal), Virt_obj->GetVater("Set"), (TYPE_HANDEL)(&Suni4::handler));
-	Virt_obj->GetVater("Set")->set_sv((TYPE_SIGNAL)(&Suni4::signal), Virt_obj->GetVater("Print"), (TYPE_HANDEL)(&Suni6::handler));
-	Virt_obj->GetVater("Read")->set_sv((TYPE_SIGNAL)(&Suni2::signal), Virt_obj->GetVater("Print"), (TYPE_HANDEL)(&Suni6::handler));
-	Virt_obj->GetVater("Sys")->set_sv((TYPE_SIGNAL)(&Suni2::signal_go), Virt_obj->GetVater("Print"), (TYPE_HANDEL)(&Suni6::handler));
-	Virt_obj->GetVater("Read")->set_sv((TYPE_SIGNAL)(&Suni2::signal), Virt_obj->GetVater("Get"), (TYPE_HANDEL)(&Suni5::handler));
-	Virt_obj->GetVater("Get")->set_sv((TYPE_SIGNAL)(&Suni5::signal), Virt_obj->GetVater("Print"), (TYPE_HANDEL)(&Suni6::handler));
-	Virt_obj->GetVater("Read")->set_sv((TYPE_SIGNAL)(&Suni2::signal), Virt_obj->GetVater("Pult"), (TYPE_HANDEL)(&Suni3::handler));
-	Virt_obj->GetVater("Pult")->set_sv((TYPE_SIGNAL)(&Suni3::signal), Virt_obj->GetVater("Print"), (TYPE_HANDEL)(&Suni6::handler));
-	Virt_obj->GetVater("Pult")->set_sv((TYPE_SIGNAL)(&Suni3::signal), Virt_obj->GetVater("CoffeeGet"), (TYPE_HANDEL)(&Suni7::handler));
-	Virt_obj->GetVater("CoffeeGet")->set_sv((TYPE_SIGNAL)(&Suni7::signal), Virt_obj->GetVater("Print"), (TYPE_HANDEL)(&Suni6::handler));
-	Virt_obj->GetVater("CoffeeGet")->set_sv((TYPE_SIGNAL)(&Suni2::signal), Virt_obj->GetVater("Get"), (TYPE_HANDEL)(&Suni5::handler));
-}
-void Suni_app::pearnet_tong() {
-	Virt_obj->Set_status_all(1);
-	string cmd;
-	getline(cin, cmd, ' ');
-	Virt_obj->GetVater("Sys")->get_sv((TYPE_SIGNAL)(&Suni2::signal_go), cmd, Virt_obj->GetVater("Print"));
-	do {
-		cin >> cmd;
-		Virt_obj->GetVater("Sys")->get_sv((TYPE_SIGNAL)
-			(&Suni2::signal), cmd, Virt_obj->GetVater("Read"));
-	} while (cmd != "Cancel" and cmd != "SHOWTREE");
-}
-Suni_app::Suni_app() : Suni("Sys", Virt_obj) { number = 1; };
-void Suni_app::signal(string& stroka) {
+	// Построение дерева иерархии объектов
+	Suni* ptr_shl_ddeens2 = new Suni2(this, "Command Reader");
+	Suni* ptr_shl_ddeens3 = new Suni3(this, "Control Panel");
+	Suni* ptr_shl_ddeens4 = new Suni4(this, "Money Receiver");
+	Suni* ptr_shl_ddeens5 = new Suni5(this, "Change Returner");
+	Suni* ptr_shl_ddeens6 = new Suni6(this, "Display");
+	Suni* ptr_shl_ddeens7 = new Suni7(this, "Coffee Dispenser");
+
+	// Установка связей сигналов и обработчиков между объектами
+	caidat_ketnoi(
+		(TYPE_SIGNAL)&Suni2::chuyen_tin_hieu,
+		ptr_shl_ddeens2,
+		(TYPE_HANDLER)(&Suni2::nhan_tin_hieu)
+	);
+
+	ptr_shl_ddeens2->caidat_ketnoi(
+		(TYPE_SIGNAL)(&Suni2::chuyen_tin_hieu),
+		ptr_shl_ddeens4,
+		(TYPE_HANDLER)(&Suni4::nhan_tin_hieu)
+	);
+
+	ptr_shl_ddeens4->caidat_ketnoi(
+		(TYPE_SIGNAL)(&Suni4::chuyen_tin_hieu),
+		ptr_shl_ddeens6,
+		(TYPE_HANDLER)(&Suni6::nhan_tin_hieu)
+	);
+
+	ptr_shl_ddeens2->caidat_ketnoi(
+		(TYPE_SIGNAL)(&Suni2::chuyen_tin_hieu),
+		ptr_shl_ddeens6,
+		(TYPE_HANDLER)(&Suni6::nhan_tin_hieu)
+	);
+
+	caidat_ketnoi(
+		(TYPE_SIGNAL)(&Suni2::chuyen_tin_hieu1), 
+		ptr_shl_ddeens6,
+		(TYPE_HANDLER)(&Suni6::nhan_tin_hieu)
+	);
+
+	ptr_shl_ddeens2->caidat_ketnoi(
+		(TYPE_SIGNAL)(&Suni2::chuyen_tin_hieu),
+		ptr_shl_ddeens5,
+		(TYPE_HANDLER)(&Suni5::nhan_tin_hieu)
+	);
+
+	ptr_shl_ddeens5->caidat_ketnoi(
+		(TYPE_SIGNAL)(&Suni5::chuyen_tin_hieu),
+		ptr_shl_ddeens6,
+		(TYPE_HANDLER)(&Suni6::nhan_tin_hieu)
+	);
+
+	ptr_shl_ddeens2->caidat_ketnoi(
+		(TYPE_SIGNAL)(&Suni2::chuyen_tin_hieu),
+		ptr_shl_ddeens3,
+		(TYPE_HANDLER)(&Suni3::nhan_tin_hieu)
+	);
+
+	ptr_shl_ddeens3->caidat_ketnoi(
+		(TYPE_SIGNAL)(&Suni3::chuyen_tin_hieu),
+		ptr_shl_ddeens6,
+		(TYPE_HANDLER)(&Suni6::nhan_tin_hieu)
+	);
+
+	ptr_shl_ddeens3->caidat_ketnoi(
+		(TYPE_SIGNAL)(&Suni3::chuyen_tin_hieu),
+		ptr_shl_ddeens7,
+		(TYPE_HANDLER)(&Suni7::nhan_tin_hieu)
+	);
+
+	ptr_shl_ddeens7->caidat_ketnoi(
+		(TYPE_SIGNAL)(&Suni7::chuyen_tin_hieu),
+		ptr_shl_ddeens6,
+		(TYPE_HANDLER)(&Suni6::nhan_tin_hieu)
+	);
+
+	ptr_shl_ddeens2->caidat_ketnoi(
+		(TYPE_SIGNAL)(&Suni2::chuyen_tin_hieu),
+		ptr_shl_ddeens5,
+		(TYPE_HANDLER)(&Suni5::nhan_tin_hieu)
+	);
+
+	ptr_shl_ddeens7->caidat_ketnoi(
+		(TYPE_SIGNAL)(&Suni2::chuyen_tin_hieu),
+		ptr_shl_ddeens5,
+		(TYPE_HANDLER)(&Suni5::nhan_tin_hieu)
+	);
 }
 
-void Suni_app::handler(string stroka) {
-};
-Suni_app::Suni_app(string name, Suni* pt) : Suni(name, pt) { number = 1; }
+// Метод запуска системы
+int Suni_app::pearnet_tong() {
+	// Приведение всех объектов в состояние готовности
+	Virt_obj -> Active();
+
+	string command;
+	getline(cin, command, ' ');
+
+	Virt_obj-> Timf_object_from_current("System")
+			-> phat_tin_hieu((TYPE_SIGNAL)(&Suni2::chuyen_tin_hieu1), command, Virt_obj
+			-> Timf_object_from_current("Display"));
+
+	do {
+		cin >> command;
+		Virt_obj-> Timf_object_from_current("System")
+				-> phat_tin_hieu((TYPE_SIGNAL)(&Suni2::chuyen_tin_hieu), command, Virt_obj
+				-> Timf_object_from_current("Command Reader"));
+	} while (command != "Cancel" && command != "SHOWTREE");
+
+	return(0);
+}
+
+Suni_app::~Suni_app() {}

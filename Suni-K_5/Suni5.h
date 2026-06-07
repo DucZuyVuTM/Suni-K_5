@@ -3,10 +3,15 @@
 
 #include "Suni.h"
 
-class Suni5 :public Suni {
-public:
-	Suni5(string name, Suni* pt) :Suni(name, pt) { number = 5; };
-	void signal(string&);
-	void handler(string);
+class Suni5: public Suni {
+	public:
+		Suni5(Suni* Suni_main, string S_chuooix);
+		int Lay_solop() override;
+
+		void chuyen_tin_hieu(string& tin_nhan);
+		void nhan_tin_hieu(string tin_nhan);
+
+		~Suni5();
 };
+
 #endif

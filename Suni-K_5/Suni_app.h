@@ -3,13 +3,12 @@
 
 #include "Suni.h"
 
-class Suni_app : public Suni {
-public:
-	Suni_app();
-	Suni_app(string name, Suni* pt);
-	void Taoj_cay_phan_cap();
-	void pearnet_tong();
-	void signal(string& now);
-	void handler(string now);
+class Suni_app: public Suni {
+	public:
+		Suni_app(Suni* Suni_main);
+		void Taoj_cay_phan_cap();
+		int pearnet_tong();
+		~Suni_app();
 };
+
 #endif

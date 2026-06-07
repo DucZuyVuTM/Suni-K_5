@@ -3,11 +3,16 @@
 
 #include "Suni.h"
 
-class Suni2 :public Suni {
-public:
-	Suni2(string name, Suni* pt) :Suni(name, pt) { number = 2; };
-	void signal(string&);
-	void handler(string);
-	void signal_go(string&);
+class Suni2: public Suni {
+	public:
+		Suni2(Suni* Suni_main, string S_chuooix);
+		int Lay_solop() override;
+
+		void chuyen_tin_hieu(string& tin_nhan);
+		void chuyen_tin_hieu1(string& tin_nhan);
+		void nhan_tin_hieu(string tin_nhan);
+
+		~Suni2();
 };
+
 #endif

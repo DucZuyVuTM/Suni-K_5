@@ -1,5 +1,5 @@
-#ifndef __SUNI_H
-#define __SUNI_H
+#ifndef __SUNI__H
+#define __SUNI__H
 
 #include <iostream>
 #include <vector>
@@ -10,50 +10,77 @@ using namespace std;
 
 class Suni;
 
-typedef void(Suni::* TYPE_SIGNAL)(std::string&);
-typedef void(Suni::* TYPE_HANDEL)(std::string);
+#define SIGNAL_D(chuyen_tin_hieu)  (TYPE_SIGNAL)(&chuyen_tin_hieu)
+#define HANDLER_D(nhan_tin_hieu)  (TYPE_HANDLER)(&nhan_tin_hieu)
+
+typedef void (Suni :: *TYPE_SIGNAL)(string&);
+typedef void (Suni :: *TYPE_HANDLER)(string);
+
+struct ketnoi {                 // Структура задания одной связи
+	TYPE_SIGNAL  ptr_tin_hieu;  // Указатель на метод сигнала
+	Suni*        ptr_Suni;      // Указатель на целевой объект
+	TYPE_HANDLER ptr_nhan_th;   // Указатель на метод обработчика
+};
 
 class Suni {
-protected:
-	int status = 0;
-	string name;
-	Suni* pt;
-	vector<Suni*> ukas;
-	static Suni* Virt_obj;
-	static Suni* jetzt;
-	struct sv {
-		TYPE_SIGNAL sig;
-		Suni* p;
-		TYPE_HANDEL hen;
-	};
-	vector<sv*> connects;
-	int number;
-	int summ = 0, fi, te;
-	vector <string>ncoffe;
-	vector <int>pcoffe;
-public:
-	void SetName(string name);
-	string GetName();
-	Suni(string name, Suni* pt);
-	Suni();
-	void print(int n);
-	void print_status(int n);
-	Suni* Get_hd();
-	void Set_hd(Suni* ptr);
-	Suni* GetVater(string name);
-	void Set_status(int p);
-	Suni* finde(string adres);
-	bool set(string adres);
-	string Get_adres();
-	int GetNumber();
-	void Set_status_all(int a);
-	void set_sv(TYPE_SIGNAL sig, Suni* p, TYPE_HANDEL hen);
-	void del_sv(TYPE_SIGNAL sig, Suni* p, TYPE_HANDEL hen);
-	void get_sv(TYPE_SIGNAL sig, string stroka, Suni* p);
-	bool GetStatus();
-	friend class Suni2;
-	friend class Suni3;
-	friend class Suni4;
+	protected:
+		string S_chuooix;
+		Suni* Suni_main;
+
+		vector <Suni*> Suni_luutru;
+		vector <ketnoi*> Suni_ddeens;
+
+		vector <string> Ncoffee;
+		vector <int> Pcoffee;
+
+		int trangthai = 0;
+		int sum = 0;
+		int c5, c10;
+
+		static Suni* Virt_obj;
+	public:
+		Suni();
+		Suni(Suni* Suni_main, string S_chuooix = "System");
+
+		bool GanGiaTri(string S_thamsomoi);
+		void Gan_trangthai(int thamso_trangthai);
+
+		Suni* Doi_tuong_duoi(string S_thamsomoi2);
+		Suni* Doi_tuong_boss();
+
+		void pearnet();
+		void pearnet1();
+
+		Suni* Timf_object_from_current(string S_thamso);
+		Suni* Timf_object_from_root(string S_thamso);
+		Suni* Timf_object_by_coord(string S_diachi);
+
+		bool dichuyen(Suni* newHead);
+		void xoa(string S_thamso);
+
+		string S_lay_ten();
+		string Toa_do();
+
+		void caidat_ketnoi(TYPE_SIGNAL   ptr_tin_hieu,
+							Suni*        ptr_Suni,
+							TYPE_HANDLER ptr_nhan_th);
+
+		void xoa_ketnoi(TYPE_SIGNAL  ptr_tin_hieu,
+						Suni*        ptr_Suni,
+						TYPE_HANDLER ptr_nhan_th);
+
+		void phat_tin_hieu(TYPE_SIGNAL ptr_tin_hieu,
+							string     tin_nhan,
+							Suni*      S_ptr);
+
+		virtual int Lay_solop();
+		void Active();
+
+		friend class Suni2;
+		friend class Suni3;
+		friend class Suni4;
+
+		~Suni();
 };
 
 #endif

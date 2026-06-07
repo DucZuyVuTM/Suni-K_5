@@ -1,24 +1,56 @@
 #include "Suni3.h"
 
-void Suni3::signal(string& now) {
-	if (now == "false") {
-		now = "\nThere is not enough money";
-	}
+// Control Panel
+
+Suni3::Suni3(Suni* Suni_main, string S_chuooix) : Suni(Suni_main, S_chuooix)
+// Вызов конструктора класса Suni
+{} // Конструктор класса Suni3
+
+// Метод возврата номера класса
+int Suni3::Lay_solop() {
+	return 3;
 }
-void Suni3::handler(string now) {
-	bool flag = true;
-	for (int i = 0; i < Virt_obj->GetVater("Sys")->ncoffe.size(); i++) {
-		if ((now == Virt_obj->GetVater("Sys")->ncoffe[i]) and ((Virt_obj->GetVater("Sys")->pcoffe[i]) <= (Virt_obj->GetVater("Sys")->summ))) {
-			Virt_obj->GetVater("Sys")->summ -= Virt_obj->GetVater("Sys")->pcoffe[i];
-			flag = false;
-			if (Virt_obj->GetVater("Sys")->summ == 0) {
-				this->get_sv((TYPE_SIGNAL)(&Suni3::signal), now, Virt_obj->GetVater("CoffeeGet"));
-			}
+
+void Suni3::chuyen_tin_hieu(string& tin_nhan) {
+	if (tin_nhan == "false")
+		tin_nhan = "\nThere is not enough money";
+}
+
+void Suni3::nhan_tin_hieu(string tin_nhan) {
+	bool check = true;
+	for (int i = 0;
+			i < Virt_obj -> Timf_object_from_current("System") -> Ncoffee.size();
+			i++) {
+
+		if ((tin_nhan == Virt_obj -> Timf_object_from_current("System") -> Ncoffee[i])
+			&& (Virt_obj -> Timf_object_from_current("System") -> Pcoffee[i] <=
+				Virt_obj -> Timf_object_from_current("System") -> sum)) {
+
+			Virt_obj-> Timf_object_from_current("System")
+					-> sum
+			-=
+			Virt_obj-> Timf_object_from_current("System")
+					-> Pcoffee[i];
+
+			check = false;
+
+			if (Virt_obj -> Timf_object_from_current("System") -> sum == 0)
+				this -> phat_tin_hieu(
+					(TYPE_SIGNAL)(&Suni3::chuyen_tin_hieu), tin_nhan,
+					Virt_obj -> Timf_object_from_current("Coffee Dispenser")
+				);
 			else
-				this->get_sv((TYPE_SIGNAL)
-					(&Suni3::signal), now + "/" + "change", Virt_obj->GetVater("CoffeeGet"));
+				this -> phat_tin_hieu(
+					(TYPE_SIGNAL)(&Suni3::chuyen_tin_hieu), tin_nhan + "/change",
+					Virt_obj -> Timf_object_from_current("Coffee Dispenser")
+				);
 		}
 	}
-	if (flag)
-		this->get_sv((TYPE_SIGNAL)(&Suni3::signal), "false", Virt_obj->GetVater("Print"));
+	if (check)
+		this -> phat_tin_hieu(
+			(TYPE_SIGNAL)(&Suni3::chuyen_tin_hieu), "false",
+			Virt_obj -> Timf_object_from_current("Display")
+		);
 }
+
+Suni3::~Suni3() {} // Деструктор класса Suni3
